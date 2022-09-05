@@ -1,7 +1,7 @@
 export const ErrorLengthCode = () =>{
     return(
         <div className="alert alert-danger" role="alert">
-            Error with code's length
+            Error with code&apos;s length
         </div>
     )
 }
@@ -17,7 +17,7 @@ export const ErrorRoom = () =>{
 export const ErrorUrl = () =>{
     return(
         <div className="alert alert-danger" role="alert">
-            Error with url, it is not a youtube's url
+            Error with url, it is not a youtube&apos;s url
         </div>
     )
 }

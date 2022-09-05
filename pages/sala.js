@@ -1,8 +1,8 @@
 import { ref, set, onValue, remove } from "firebase/database"
-import { db } from "./chatFirebase/ChatOptionAPI"
+import { db } from "../components/chatFirebase/ChatOptionAPI"
 import { useEffect, useState } from 'react'
-import { Messages } from './showMessages'
-import { Username } from './username'
+import { Messages } from '../components/showMessages'
+import { Username } from '../components/username'
 
 const dataUser = {
     "name": "",
@@ -22,7 +22,7 @@ const detailsVideo = {
 let loadVideo;
 let timeInterval;
 
-export default function SalaVideo({ room }) {
+export default function SalaVideo({ room = null }) {
 
     const userdb = ref(db, `${room}`)
     const [allMessages, setAllMessages] = useState([])
@@ -31,10 +31,10 @@ export default function SalaVideo({ room }) {
     const [username, setUsername] = useState(false)
     let showMess = null
     let names = ""
-    let codeValid = room.substring(2, 13)
+    let codeValid = room !== null ? room.substring(2, 13) : null
     
     if(allMessages[0]){
-        showMess = allMessages[0][`${room}`] ? Object.values(allMessages[0][`${room}`]) : null
+        showMess = allMessages[0]["chat"] ? Object.values(allMessages[0]["chat"]) : null
         names = allMessages[0]["members"] ? Object.keys(allMessages[0]["members"]) : ""
     }
 
@@ -62,7 +62,7 @@ export default function SalaVideo({ room }) {
     }
 
     function writeUserData({ id, name, message, host }){
-        set(ref(db, `${room}/${room}/${id- 1}`), {
+        set(ref(db, `${room}/chat/${id- 1}`), {
             name,
             message,
             id,
@@ -147,7 +147,7 @@ export default function SalaVideo({ room }) {
                 setTimeout(()=>{
                     setEndVideo(true)
                     remove(userdb)
-                }, 60000)
+                }, 120000)
             }
         }
 
