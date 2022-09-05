@@ -15,6 +15,9 @@ export function Inputcreate({ setSala }){
   const [err, setErr] = useState(null)
 
   function writeUserData(urlValid, data){
+    set(ref(db, `${data}/url`), {
+      urlValid
+    })
     set(ref(db, `user/urls/${data}`), {
       urlValid
     })
@@ -33,7 +36,7 @@ export function Inputcreate({ setSala }){
     
     let data = url.Url.substring(30,43)
     setSala(data)
-    let urlValid = `https://www.youtube.com/embed/${data.substring(32,43)}`
+    let urlValid = `https://www.youtube.com/watch?${data}`
     
     writeUserData(urlValid, data)
   }
