@@ -1,3 +1,4 @@
+//Show Messages on list -- Components/sala.js line 183
 export const Messages = ({ data }) =>{
 
     let { message, name, host } = data

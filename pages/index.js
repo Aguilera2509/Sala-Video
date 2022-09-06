@@ -6,7 +6,7 @@ import { Inputcreate, InputDelete, Inputjoin } from '../components/input'
 import SalaVideo from './sala'
 
 export default function Home() {
-
+  //Variable for rendering conditional
   const [sala, setSala] = useState("")
 
   return (
@@ -22,8 +22,9 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossOrigin="anonymous"></link>
       </Head>
-
-      {sala.length !== 13 &&
+      
+      {//First rendering for putting the CODE or URL
+      sala.length !== 13 &&
       <main className={styles.main}>
           <h3>Bienvenido, usuario, te explico rapidamente como funciona mi app</h3>
           <h5>Deberas ingresar una URL de youtube para crear una sala, pasar el Code a tus amigos y ellos podran entrar</h5>
@@ -37,7 +38,8 @@ export default function Home() {
       </main>
       }
 
-      {sala.length === 13 &&
+      {//Second rendering with the video
+      sala.length === 13 &&
         <SalaVideo room={sala} />
       }    
 

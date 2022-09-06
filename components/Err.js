@@ -1,3 +1,4 @@
+//Handle ERRS at the moment put CODE or URL -- Components/input.js
 export const ErrorLengthCode = () =>{
     return(
         <div className="alert alert-danger" role="alert">

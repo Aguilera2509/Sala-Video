@@ -4,13 +4,14 @@ import { useEffect, useState } from 'react'
 import { Messages } from '../components/showMessages'
 import { Username } from '../components/username'
 
+//Variable messages
 const dataUser = {
     "name": "",
     "message": "",
     "id": null,
     "host": false
 }
-
+//Variable video
 const detailsVideo = {
     "currentTime": 0,
     "duration" : 0,
@@ -18,26 +19,27 @@ const detailsVideo = {
     "pause" : true,
     "end": false
 }
-
+//Variable api iframe youtube
 let loadVideo;
+//variable setInterval -- line 119 && line 147
 let timeInterval;
 
 export default function SalaVideo({ room = null }) {
 
-    const userdb = ref(db, `${room}`)
-    const [allMessages, setAllMessages] = useState([])
-    const [mess, setMess] = useState(dataUser)
-    const [endVideo, setEndVideo] = useState(false)
-    const [username, setUsername] = useState(false)
-    let showMess = null
-    let names = ""
-    let codeValid = room !== null ? room.substring(2, 13) : null
+    const userdb = ref(db, `${room}`) //Variable for to access that specific data. Example: v=HK-eqlqdXPo
+    const [allMessages, setAllMessages] = useState([]) //Variable no allMessages, ALLDATA -- line 89
+    const [mess, setMess] = useState(dataUser) //Handle Messages
+    const [endVideo, setEndVideo] = useState(false) //Best handle endVideo
+    const [username, setUsername] = useState(false) //Variablle for deciding name and Host of the room
+    let showMess = null 
+    let names = "" //Validate if a name exists
+    let codeValid = room !== null ? room.substring(2, 13) : null //ID API YOUTUBE. Example: HK-eqlqdXPo
     
     if(allMessages[0]){
         showMess = allMessages[0]["chat"] ? Object.values(allMessages[0]["chat"]) : null
         names = allMessages[0]["members"] ? Object.keys(allMessages[0]["members"]) : ""
     }
-
+    //Reflecting changes of HOST on all devices or everybody
     if(allMessages[0] && !dataUser.host){
         detailsVideo.pause = allMessages[0].details ? allMessages[0].details.pause : true
         detailsVideo.volume = allMessages[0].details ? allMessages[0].details.volume : 50
@@ -97,7 +99,7 @@ export default function SalaVideo({ room = null }) {
             firstScriptTag.parentNode.insertBefore(tag, firstScriptTag); 
         }
     }, [])
-    
+    //API
     loadVideo = () =>{
         let player;
         player = new YT.Player('ytplayer', {
@@ -118,7 +120,7 @@ export default function SalaVideo({ room = null }) {
                 onPlayer(event)
             },999)
         }
-
+        //Function waiting the changes video, send data db if you are HOST and receive if you are not HOST
         function onPlayer(event){
             if(dataUser.host){
                 detailsVideo.volume = event.target.getVolume()
@@ -130,7 +132,7 @@ export default function SalaVideo({ room = null }) {
                 writeDetailsVideo(detailsVideo)
             }else{
                 event.target.setVolume(detailsVideo.volume)
-
+                
                 if(detailsVideo.currentTime !== 0) Math.floor(event.target.getCurrentTime()-detailsVideo.currentTime) >= -4 ? "" : event.target.seekTo(detailsVideo.currentTime)
                 if(detailsVideo.currentTime !== 0) Math.floor(event.target.getCurrentTime()-detailsVideo.currentTime) >= 2 ? event.target.seekTo(detailsVideo.currentTime) : ""
                 
@@ -150,7 +152,7 @@ export default function SalaVideo({ room = null }) {
                 }, 120000)
             }
         }
-
+        //Only PAUSE
         function onPlayerStateChange(event) {
             if(dataUser.host && event.data === YT.PlayerState.PLAYING){
                 detailsVideo.pause = false
@@ -167,12 +169,13 @@ export default function SalaVideo({ room = null }) {
         }
     }
 
+    //div id=ytplayer is where youtube`s api put the video
     return ( 
         <>
             <section id='sectionCODE' className="code">
                 <h3 id='hola'>Code: {room} {dataUser.host && "// Eres el HOST"}</h3>
             </section>
-
+            
             <div id="ytplayer"></div>
 
             <section id='sectionSHOWMESSAGES' className="showMessages">
@@ -190,7 +193,8 @@ export default function SalaVideo({ room = null }) {
                             <input type="text" name='message' className="form-control" id="ControlInputChat" value={mess.message} onChange={handleChange}/>
                         </div>
                         <div className="col">
-                        {username &&
+                        {//If you do not have nickname, you cannot submit messages
+                        username &&
                             <button type="submit" className="btn btn-primary">Enviar</button>
                         }
                         {!username && 

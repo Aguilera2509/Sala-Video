@@ -1,26 +1,26 @@
 import { ref, set } from "firebase/database"
 import { db } from "./chatFirebase/ChatOptionAPI"
 import { useState } from "react"
-
+//Function used in pages/sala.js -- line 212 
 export const Username = ({ dataUser, data, setData, setUsername, names, room }) =>{
     
-    const [errname, setErrname] = useState(false)
-    const [err, setErr] = useState(false)
+    const [errname, setErrname] = useState(false) //Validate if name have 2 or less words and if name is same a full space. Example: Name:"      "
+    const [err, setErr] = useState(false) //Validate if name exists in db
 
     function handleSubmit(e){
         e.preventDefault()
         if(/^ *$/.test(data.name)) return setErrname(true)
         if(data.name.length <= 2) return setErrname(true)
-        if(names.length === 0) data.host = true
+        if(names.length === 0) data.host = true //If you are the first in decide or put nickname, you will be the HOST 
         let valid
         if(names.length !== 0){
             valid = names.find(el => el.toLowerCase() == data.name.toLowerCase())
         }
-        if(valid !== undefined) return setErr(true)
-        dataUser.name = data.name
-        dataUser.host = data.host
+        if(valid !== undefined) return setErr(true) //Name exists in db
+        dataUser.name = data.name //Save in DataUser name -- pages/sala.js line 8
+        dataUser.host = data.host //Save in DataUser HOST -- pages/sala.js line 8 because when submit a messages, mess -- pages/sala.js line 31 restore el value of mess to DataUser
         writeUserName(data)
-        setUsername(true)
+        setUsername(true) //Disappear the button "Nickname" in pages/sala.js and this components
     }
 
     function handleChange(e){

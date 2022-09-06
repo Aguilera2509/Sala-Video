@@ -2,13 +2,13 @@ import { useEffect, useState } from "react"
 import { ErrorLengthCode, ErrorUrl, ErrorRoom } from "./Err"
 import { ref, set, onValue, remove } from "firebase/database"
 import { db, userdb } from "./chatFirebase/ChatOptionAPI"
-
+//Variable handle url, code and codeDelete
 let data = {
   "Url" : "",
   "Code": "",
   "CodeDelete": ""
 }
-
+//Function where use only data.Url and setSala for rendering conditional for create room and DB
 export function Inputcreate({ setSala }){
 
   const [url, setUrl] = useState(data)
@@ -75,12 +75,13 @@ export function Inputcreate({ setSala }){
     </>
   )
 }
-
+//Function where use only data.Code and setSala for rendering conditional for join room
+//Note: Variable err is length code and Variable errRoom is if the room reality exists
 export function Inputjoin({ setSala }){
 
   const [code, setCode] = useState(data)
-  const [err, setErr] = useState(null)
-  const [errRoom, setErrRoom] = useState(null)
+  const [err, setErr] = useState(null) //Length code
+  const [errRoom, setErrRoom] = useState(null) //Room exists? 
   const [codedb, setCodedb] = useState([])
 
   const handleChange = (e) =>{
@@ -148,12 +149,14 @@ export function Inputjoin({ setSala }){
       </>
   )
 }
-
+//Function where use only data.CodeDelete
+//If a room is bug or el host is an asshole, put code in this input and that room will remove immediately
 export function InputDelete(){
 
   const [codeDelete, setCodeDelete] = useState(data)
-  const [err, setErr] = useState(null)
-  const [errRoom, setErrRoom] = useState(null)
+  const [err, setErr] = useState(null) //Length Code
+  const [errRoom, setErrRoom] = useState(null) //Room Exists?
+  const [success, setSuccess] = useState(null) //Room removed
   const [codedb, setCodedb] = useState([])
 
   const handleChange = (e) =>{
@@ -178,6 +181,7 @@ export function InputDelete(){
       const userdb = ref(db, `${fil}`)
       
       remove(userdb)
+      setSuccess(true)
     }
   }
 
@@ -211,6 +215,11 @@ export function InputDelete(){
               <input type="text" className="form-control" name="CodeDelete" id="codeDeleteInput" placeholder="v=dbevJM-2lcY" value={codeDelete.CodeDelete} onChange={handleChange}/>
               {err && <ErrorLengthCode/>}
               {errRoom && <ErrorRoom/>}
+              {success && 
+                <div className="alert alert-success" role="alert">
+                  Room Deleted 
+                </div>
+              }
             </div>
             <div className="modal-footer">
               <button type="submit" className="btn btn-primary" data-bs-dismiss="modal">Delete</button>
